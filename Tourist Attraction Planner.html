@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tourist Attraction Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6fafb;--card:#fff;--ink:#0f2236;--mut:#52667a;--pri:#0e8a93;--pri2:#0b5f8a;--ok:#14935a;--okbg:#e3f6ec;--warn:#e8890c;--warnbg:#fff3df;--bad:#c63d3d;--badbg:#fdeaea;--line:#dbe6ec;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1722;--card:#13232f;--ink:#e8f1f6;--mut:#9db1c0;--pri:#3cc0c9;--pri2:#5aa9d6;--ok:#4cd197;--okbg:#10382a;--warn:#f5a940;--warnbg:#3a2a10;--bad:#ef7f7f;--badbg:#3b1b1b;--line:#27404f}}
+:root[data-theme="dark"]{--bg:#0b1722;--card:#13232f;--ink:#e8f1f6;--mut:#9db1c0;--pri:#3cc0c9;--pri2:#5aa9d6;--ok:#4cd197;--okbg:#10382a;--warn:#f5a940;--warnbg:#3a2a10;--bad:#ef7f7f;--badbg:#3b1b1b;--line:#27404f}
+html{scroll-behavior:smooth;scroll-padding-top:calc(70px + env(safe-area-inset-top,0px))}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,sans-serif;line-height:1.55}
+h1,h2,h3{font-family:'Bricolage Grotesque',Figtree,sans-serif;margin:0 0 .5rem;line-height:1.15}
+.wrap{max-width:1120px;margin:0 auto;padding:0 18px}section{padding:56px 0}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--card);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:14px;height:62px}.logo{font:800 1.1rem 'Bricolage Grotesque';color:var(--pri);margin-right:auto;text-decoration:none}
+nav a.l{color:var(--ink);text-decoration:none;font-size:.92rem;padding:6px 8px;border-radius:8px}nav a.l:hover{background:var(--okbg)}
+#burger{display:none;background:none;border:1px solid var(--line);border-radius:8px;font-size:1.3rem;padding:2px 10px;color:var(--ink)}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:12px;padding:11px 20px;font:700 .95rem Figtree;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(14,138,147,.3)}.btn.alt{background:transparent;color:var(--pri);border:2px solid var(--pri)}.btn.org{background:var(--warn)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 4px 18px rgba(15,34,54,.06)}
+.grid{display:grid;gap:16px}.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}.g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:30px;align-items:center;padding:50px 0}
+.hero h1{font-size:clamp(2.1rem,5vw,3.6rem);font-weight:800}.hero p{color:var(--mut);font-size:1.1rem;max-width:52ch}
+.tag{display:inline-block;background:var(--warnbg);color:var(--warn);font-weight:700;border-radius:99px;padding:4px 12px;font-size:.85rem;margin-bottom:12px}
+.stat b{display:block;font:800 1.5rem 'Bricolage Grotesque';color:var(--pri)}.stat span{color:var(--mut);font-size:.9rem}
+.sub{color:var(--mut);max-width:70ch}
+label{font-weight:700;font-size:.9rem;display:block;margin-bottom:4px}
+input[type=number],input[type=search],select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+.seg{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden}.seg button{flex:1;padding:10px 6px;border:0;background:var(--bg);color:var(--ink);font:600 .88rem Figtree;cursor:pointer}.seg button.on{background:var(--pri);color:#fff}
+.err{background:var(--badbg);color:var(--bad);padding:10px 14px;border-radius:10px;margin-top:12px;font-weight:600}
+.at{cursor:pointer;transition:transform .15s,border-color .15s;position:relative}.at:hover{transform:translateY(-3px)}.at.sel{border-color:var(--ok);background:var(--okbg)}
+.at .em{font-size:2rem}.chips span{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:2px 10px;font-size:.8rem;margin:2px 3px 2px 0}
+.pill{border-radius:99px;padding:2px 10px;font-size:.78rem;font-weight:700}.ok{background:var(--okbg);color:var(--ok)}.no{background:var(--badbg);color:var(--bad)}
+.tw{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:620px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}th{color:var(--mut)}
+.m b{font:800 2rem 'Bricolage Grotesque';color:var(--pri);display:block}.m span{color:var(--mut)}
+.step{display:flex;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line)}.step .n{background:var(--ok);color:#fff;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:700;flex:none}
+.log div{padding:8px 12px;border-radius:10px;margin-bottom:6px;font-size:.92rem}.log .y{background:var(--okbg)}.log .x{background:var(--badbg)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-weight:700;font-size:.85rem;margin:10px 0}.flow i{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:3px 9px;font-style:normal}
+.cx{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:3px 10px;font-weight:700;display:inline-block;margin-top:4px}
+svg text{font-family:Figtree,sans-serif}#route{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1.6s ease forwards}@keyframes draw{to{stroke-dashoffset:0}}
+.empty{color:var(--mut);padding:24px;text-align:center;border:2px dashed var(--line);border-radius:14px}
+footer{background:#0f2236;color:#cfe0ea;padding:36px 0;margin-top:30px}footer a{color:#7fd6dc;margin-right:14px}
+@media(max-width:860px){.hero{grid-template-columns:1fr}#links{display:none;position:absolute;top:62px;left:0;right:0;background:var(--card);flex-direction:column;padding:10px 18px;border-bottom:1px solid var(--line)}#links.open{display:flex}#burger{display:block}nav .btn{display:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}#route{stroke-dashoffset:0}}
+</style></head><body>
+<nav><div class="wrap"><a class="logo" href="#home">🧭 Tourist Attraction Planner</a>
+<button id="burger" aria-label="Menu">☰</button>
+<div id="links" style="display:contents"><span id="lk" style="display:contents"></span></div>
+<a class="btn" href="#plan">Start Planning</a></div></nav>
+
+<main class="wrap">
+<section id="home"><div class="hero"><div>
+<span class="tag">DAA Hackathon Project</span>
+<h1>Plan Your Perfect Trip with Algorithms</h1>
+<p>Choose your available time and budget. Our algorithm analyzes tourist attractions, selects the best feasible combination and generates an optimized visit order.</p>
+<p style="margin:0 0 16px"><b>Plan Smarter. Explore More.</b></p>
+<a class="btn" href="#plan">Start Planning</a> <a class="btn alt" href="#algos">Explore Algorithms</a></div>
+<svg viewBox="0 0 420 300" role="img" aria-label="Traveler exploring attractions connected by a route"><rect width="420" height="300" rx="24" fill="var(--card)" stroke="var(--line)"/>
+<path d="M50 240 Q120 120 200 190 T370 60" fill="none" stroke="var(--ok)" stroke-width="5" stroke-dasharray="2 12" stroke-linecap="round"/>
+<g font-size="30" text-anchor="middle"><text x="50" y="250">🕌</text><text x="200" y="200">🏰</text><text x="370" y="70">🛕</text><text x="120" y="110">🏛️</text><text x="300" y="220">🌳</text></g>
+<circle cx="140" cy="165" r="6" fill="var(--warn)"/><text x="140" y="148" font-size="26" text-anchor="middle">🧳</text>
+<text x="210" y="285" text-anchor="middle" font-size="12" fill="var(--mut)">Nodes + edges + best route</text></svg></div>
+<div class="grid g3"><div class="card stat"><b>3 Algorithms</b><span>Greedy + Knapsack + Graph Traversal</span></div><div class="card stat"><b>Time &amp; Budget Aware</b><span>Plan within real constraints</span></div><div class="card stat"><b>Smart Route</b><span>Get a feasible attraction visit order</span></div></div></section>
+
+<section><h2>The Challenge</h2><p class="sub">Tourists often have limited time and money but many attractions to choose from. Manually deciding which places to visit and in what order can lead to wasted time, unnecessary expenses and inefficient travel.</p>
+<div class="grid g4"><div class="card">⏳<h3>Limited Time</h3><span class="sub">A day only has so many hours.</span></div><div class="card">💸<h3>Limited Budget</h3><span class="sub">Entry fees add up fast.</span></div><div class="card">🗺️<h3>Too Many Attractions</h3><span class="sub">2<sup>n</sup> possible combinations.</span></div><div class="card">🧩<h3>Difficult Route Planning</h3><span class="sub">Order decides wasted travel.</span></div></div>
+<div class="card" style="margin-top:16px;border-color:var(--warn)"><h3>Our Goal</h3>Select valuable attractions while respecting time and budget constraints, then generate an understandable visit order.</div></section>
+
+<section id="plan"><h2>Plan Trip</h2>
+<div class="card"><div class="grid g3">
+<div><label for="T">Available time (hours)</label><input id="T" type="number" step="0.5" value="8"><input id="Tr" type="range" min="1" max="16" step="0.5" value="8" style="width:100%"></div>
+<div><label for="B">Maximum budget (₹)</label><input id="B" type="number" step="10" value="1500"></div>
+<div><label>Optimization method</label><div class="seg" id="meth"><button data-m="greedy">Greedy</button><button data-m="knap">0/1 Knapsack</button><button data-m="both" class="on">Compare Both</button></div></div></div>
+<p class="sub" style="margin:12px 0 0" id="poolnote"></p>
+<div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="go">🚀 Generate My Trip</button><button class="btn org" id="demo">🎯 Try Demo</button></div>
+<div id="err"></div></div></section>
+
+<section id="attractions"><h2>Attractions</h2><p class="sub">Pick the places you care about, or leave all unselected to let the algorithm choose from every attraction.</p>
+<div class="grid g4" style="margin:12px 0"><input type="search" id="q" placeholder="Search attractions"><select id="cat"></select><select id="sort"><option value="">Sort: default</option><option value="p">Priority (high first)</option><option value="c">Cost (low first)</option><option value="t">Visit time (short first)</option></select><button class="btn alt" id="clr">Clear selection</button></div>
+<div class="grid g4" id="cards"></div></section>
+
+<section id="results"><h2>Results</h2><div id="res"><div class="empty">Set your time and budget, then press <b>Generate My Trip</b> or <b>Try Demo</b>.</div></div></section>
+
+<section id="map"><h2>Route Map</h2><p class="sub">Nodes are attractions, grey lines are graph edges (3 nearest neighbours), the green line is the recommended route.</p>
+<div class="seg" id="mv" style="max-width:340px;margin:10px 0"><button data-v="greedy">Greedy route</button><button data-v="knap" class="on">Knapsack route</button></div>
+<div class="card" style="padding:8px"><svg id="svg" viewBox="0 0 700 460" style="width:100%;height:auto" role="img" aria-label="Interactive route map"></svg></div></section>
+
+<section id="algos"><h2>Algorithms Behind the Planner</h2><div class="grid g3">
+<div class="card"><h3>Greedy</h3><p>Chooses the best locally feasible option at each step.</p><div class="flow"><i>Input</i>›<i>Score</i>›<i>Sort</i>›<i>Select</i>›<i>Final Plan</i></div><span class="cx">O(n log n)</span></div>
+<div class="card"><h3>0/1 Knapsack</h3><p>Finds a high-value combination under resource constraints. It evaluates combinations systematically instead of choosing only the best immediate option.</p><div class="flow"><i>Items</i>›<i>Dynamic Programming</i>›<i>Optimal Combination</i></div><span class="cx">O(n × T × B)</span></div>
+<div class="card"><h3>Graph Traversal</h3><p>Explores relationships between attractions.</p><div class="flow"><i>Nodes</i>›<i>Edges</i>›<i>BFS/DFS</i>›<i>Traversal</i></div><span class="cx">O(V + E)</span></div></div></section>
+
+<section id="about"><h2>Built for DAA Hackathon</h2><p class="sub">Tourist Attraction Planner demonstrates how algorithmic thinking can solve real-world itinerary planning problems.</p>
+<div class="grid g4"><div class="card"><h3>Problem Domain</h3>Travel Optimization</div><div class="card"><h3>Core Algorithms</h3>Greedy + 0/1 Knapsack + Graph Traversal</div><div class="card"><h3>Technology</h3>Modern Web UI + Algorithmic Backend</div><div class="card"><h3>Key Objective</h3>Optimize attractions under time and budget constraints.</div></div>
+<h2 style="margin-top:32px">Why This Project Matters</h2><div class="grid g3">
+<div class="card">🌍 Real-world problem</div><div class="card">🧠 Algorithmic decision making</div><div class="card">🔍 Transparent optimization</div><div class="card">📊 Interactive visualization</div><div class="card">🧱 Scalable architecture (data, algorithms, UI separated)</div><div class="card">🙂 Beginner-friendly user experience</div></div></section>
+</main>
+<footer id="contact"><div class="wrap"><h3 style="color:#fff">Tourist Attraction Planner</h3><p>Plan Smarter. Explore More.</p>
+<p><a href="#about">About</a><a href="#algos">Algorithms</a><a href="#plan">Plan Trip</a><a href="#map">Route Map</a><a href="#contact">Contact</a></p><small>Built for College Hackathon | DAA Project</small></div></footer>
+
+<script>
+/* ---------- DATA ---------- */
+const DATA=[
+{id:1,n:'Charminar',loc:'Old City',t:1.5,c:150,p:9,cat:'Historical',e:'🕌',lat:17.3616,lng:78.4747},
+{id:2,n:'Salar Jung Museum',loc:'Darulshifa',t:2,c:200,p:8,cat:'Museum',e:'🏛️',lat:17.3713,lng:78.4804},
+{id:3,n:'Birla Mandir',loc:'Naubath Pahad',t:1,c:60,p:8,cat:'Religious',e:'🛕',lat:17.4062,lng:78.4691},
+{id:4,n:'Hussain Sagar',loc:'Tank Bund',t:1.5,c:100,p:7,cat:'Nature',e:'⛵',lat:17.4239,lng:78.4738},
+{id:5,n:'NTR Gardens',loc:'Necklace Road',t:1,c:80,p:6,cat:'Nature',e:'🌳',lat:17.4126,lng:78.4690},
+{id:6,n:'Golconda Fort',loc:'Golconda',t:2.5,c:250,p:10,cat:'Historical',e:'🏰',lat:17.3833,lng:78.4011},
+{id:7,n:'Qutb Shahi Tombs',loc:'Ibrahim Bagh',t:1.5,c:120,p:8,cat:'Historical',e:'⚱️',lat:17.3947,lng:78.3945},
+{id:8,n:'Shilparamam',loc:'Madhapur',t:2,c:100,p:7,cat:'Cultural',e:'🎭',lat:17.4529,lng:78.3810}];
+const CATS=['Historical','Museum','Religious','Nature','Entertainment','Cultural'];
+
+/* ---------- ALGORITHMS ---------- */
+function greedy(items,T,B){
+  const rows=items.map(x=>({...x,s:x.p/(x.t/T+x.c/B)})).sort((a,b)=>b.s-a.s);
+  let rt=T,rb=B;const sel=[],log=[];
+  for(const r of rows){const ot=r.t>rt+1e-9,ob=r.c>rb;
+    if(!ot&&!ob){sel.push(r);rt-=r.t;rb-=r.c;r.dec='Selected';r.why='Selected because it provides high priority value within the remaining time and budget.';}
+    else{r.dec='Rejected';r.why=ot&&ob?'Rejected: both constraints exceeded':ot?'Rejected: exceeds remaining time':'Rejected: exceeds remaining budget';}
+    log.push({ok:!ot&&!ob,name:r.n,why:r.why});}
+  return{sel,log,rows};}
+function knapsack(items,T,B){
+  const W=Math.floor(T*2+1e-9),bu=B>3000?Math.ceil(B/3000)*10:10,K=Math.floor(B/bu),n=items.length;
+  const w=items.map(x=>Math.round(x.t*2)),k=items.map(x=>Math.ceil(x.c/bu));
+  const S1=(K+1),S2=(W+1)*S1,dp=new Int32Array((n+1)*S2);
+  for(let i=1;i<=n;i++)for(let t=0;t<=W;t++)for(let b=0;b<=K;b++){
+    let v=dp[(i-1)*S2+t*S1+b];
+    if(w[i-1]<=t&&k[i-1]<=b){const y=dp[(i-1)*S2+(t-w[i-1])*S1+b-k[i-1]]+items[i-1].p;if(y>v)v=y;}
+    dp[i*S2+t*S1+b]=v;}
+  let t=W,b=K;const pick=new Set();
+  for(let i=n;i>0;i--){if(dp[i*S2+t*S1+b]!==dp[(i-1)*S2+t*S1+b]){pick.add(i-1);t-=w[i-1];b-=k[i-1];}}
+  const sel=items.filter((_,i)=>pick.has(i));
+  const log=items.map((x,i)=>pick.has(i)?{ok:1,name:x.n,why:'Part of the optimal combination found by the DP table (dp['+(i+1)+'][time][budget]).'}:
+    {ok:0,name:x.n,why:'Excluded: including it would lower the best achievable total priority within time and budget.'});
+  return{sel,log,cells:n*(W+1)*(K+1),W,K,bu};}
+
+/* ---------- GRAPH ---------- */
+const rad=d=>d*Math.PI/180;
+function km(a,b){const R=6371,dl=rad(b.lat-a.lat),dg=rad(b.lng-a.lng);const h=Math.sin(dl/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dg/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
+function buildGraph(nodes){const adj=new Map(nodes.map(x=>[x.id,new Set()]));
+  nodes.forEach(a=>{nodes.filter(b=>b.id!==a.id).sort((p,q)=>km(a,p)-km(a,q)).slice(0,3).forEach(b=>{adj.get(a.id).add(b.id);adj.get(b.id).add(a.id);});});
+  let e=0;adj.forEach(s=>e+=s.size);return{adj,E:e/2,V:nodes.length};}
+function bfs(g,s){const seen=new Set([s]),q=[s],o=[];while(q.length){const u=q.shift();o.push(u);[...g.adj.get(u)].sort((a,b)=>a-b).forEach(v=>{if(!seen.has(v)){seen.add(v);q.push(v);}});}return o;}
+function dfs(g,s){const seen=new Set(),o=[];(function go(u){seen.add(u);o.push(u);[...g.adj.get(u)].sort((a,b)=>a-b).forEach(v=>{if(!seen.has(v))go(v);});})(s);return o;}
+/* route: nearest-neighbour order over selected stops */
+function route(sel){if(!sel.length)return[];const left=[...sel];let cur=left.splice(left.findIndex(x=>x.id===1)>=0?left.findIndex(x=>x.id===1):left.reduce((m,x,i,a)=>x.lng>a[m].lng?i:m,0),1)[0];const out=[cur];
+  while(left.length){left.sort((a,b)=>km(cur,a)-km(cur,b));cur=left.shift();out.push(cur);}return out;}
+
+/* ---------- UI STATE ---------- */
+const $=s=>document.querySelector(s);const st={m:'both',v:'knap',sel:new Set(),out:null};
+const H=(a,b)=>a.map(b).join('');
+const fmt=n=>Number.isInteger(n)?n:n.toFixed(1);
+$('#lk').innerHTML=H([['home','Home'],['plan','Plan Trip'],['attractions','Attractions'],['algos','Algorithms'],['map','Route Map'],['results','Results'],['about','About Project']],([h,t])=>`<a class="l" href="#${h}">${t}</a>`);
+$('#burger').onclick=()=>{const l=$('#links');if(innerWidth<=860){l.classList.toggle('open');}};
+$('#links').addEventListener('click',()=>$('#links').classList.remove('open'));
+$('#cat').innerHTML='<option value="">All categories</option>'+H(CATS,c=>`<option>${c}</option>`);
+
+function drawCards(){
+  let l=DATA.filter(x=>(!$('#cat').value||x.cat===$('#cat').value)&&(x.n+x.loc+x.cat).toLowerCase().includes($('#q').value.toLowerCase()));
+  const s=$('#sort').value;if(s)l.sort((a,b)=>s==='p'?b.p-a.p:a[s]-b[s]);
+  $('#cards').innerHTML=l.length?H(l,x=>`<div class="card at ${st.sel.has(x.id)?'sel':''}" data-id="${x.id}"><div class="em">${x.e}</div><h3>${x.n}</h3><div class="sub">📍 ${x.loc}</div>
+  <div class="chips"><span>⏱ ${x.t} h</span><span>₹${x.c}</span><span>★ ${x.p}</span><span>${x.cat}</span></div>
+  <button class="btn ${st.sel.has(x.id)?'':'alt'}" style="margin-top:8px;padding:7px 14px">${st.sel.has(x.id)?'✓ Selected':'Select'}</button></div>`):'<div class="empty" style="grid-column:1/-1">No attractions match. Clear the search or category filter.</div>';
+  $('#poolnote').textContent=st.sel.size?`Planning from ${st.sel.size} selected attraction(s).`:'No attractions selected: planning from all 8 attractions.';}
+$('#cards').onclick=e=>{const c=e.target.closest('.at');if(!c)return;const id=+c.dataset.id;st.sel.has(id)?st.sel.delete(id):st.sel.add(id);drawCards();};
+['#q','#cat','#sort'].forEach(s=>$(s).oninput=drawCards);$('#clr').onclick=()=>{st.sel.clear();drawCards();};
+$('#Tr').oninput=e=>$('#T').value=e.target.value;$('#T').oninput=e=>$('#Tr').value=e.target.value;
+$('#meth').onclick=e=>{const b=e.target.closest('button');if(!b)return;st.m=b.dataset.m;[...$('#meth').children].forEach(x=>x.classList.toggle('on',x===b));if(st.out)run(false);};
+$('#mv').onclick=e=>{const b=e.target.closest('button');if(!b)return;st.v=b.dataset.v;[...$('#mv').children].forEach(x=>x.classList.toggle('on',x===b));drawMap();};
+
+function run(scroll=true){
+  const T=parseFloat($('#T').value),B=parseFloat($('#B').value),er=$('#err');er.innerHTML='';
+  const bad=m=>{er.innerHTML=`<div class="err">${m}</div>`;};
+  if(!(T>0)||T>24)return bad('Please enter a valid available time.');
+  if(!(B>0))return bad('Please enter a valid budget.');
+  const pool=st.sel.size?DATA.filter(x=>st.sel.has(x.id)):DATA;
+  const g=greedy(pool,T,B),k=knapsack(pool,T,B);
+  const used=st.m==='greedy'?[g]:st.m==='knap'?[k]:[g,k];
+  if(used.every(r=>!r.sel.length)){st.out=null;$('#res').innerHTML='<div class="empty">No feasible attractions found for the current constraints. Try increasing time or budget.</div>';drawMap();bad('No feasible attractions found for the current constraints. Try increasing time or budget.');if(scroll)$('#results').scrollIntoView();return;}
+  st.out={T,B,pool,g,k};if(st.m!=='both')st.v=st.m;else if(!['greedy','knap'].includes(st.v))st.v='knap';
+  $('#mv').style.display=st.m==='both'?'flex':'none';[...$('#mv').children].forEach(x=>x.classList.toggle('on',x.dataset.v===st.v));
+  render();drawMap();if(scroll)$('#results').scrollIntoView();}
+const tot=r=>({n:r.sel.length,t:r.sel.reduce((s,x)=>s+x.t,0),c:r.sel.reduce((s,x)=>s+x.c,0),p:r.sel.reduce((s,x)=>s+x.p,0)});
+function panel(name,r,T,B,cx,how){const s=tot(r);return`<div class="card"><h3>${name}</h3><div class="chips">${H(r.sel,x=>`<span>${x.e} ${x.n}</span>`)||'<span>None</span>'}</div>
+<p class="sub">⏱ ${fmt(s.t)}/${T} h &nbsp; ₹${s.c}/${B} &nbsp; ★ ${s.p}<br>${how}</p><span class="cx">${cx}</span></div>`;}
+function render(){
+  const{T,B,pool,g,k}=st.out;const m=st.m,main=m==='greedy'?g:m==='knap'?k:(st.v==='greedy'?g:k),s=tot(main),ord=route(main.sel);
+  const g2=buildGraph(DATA),start=ord.length?ord[0].id:1;
+  let h=`<div class="grid g4"><div class="card m"><b data-n="${s.n}">0</b><span>Attractions Selected</span></div><div class="card m"><b data-n="${s.t}" data-u=" h">0</b><span>Total Time</span></div><div class="card m"><b data-n="${s.c}" data-p="₹">0</b><span>Total Budget</span></div><div class="card m"><b data-n="${s.p}">0</b><span>Total Priority</span></div></div>`;
+  h+=`<h3 style="margin-top:24px">Your Recommended Trip ${m==='both'?`<span class="pill ok">${st.v==='greedy'?'Greedy':'Knapsack'} plan</span>`:''}</h3><div class="card">`+H(ord,(x,i)=>`<div class="step"><div class="n">${i+1}</div><div><b>${x.e} ${x.n}</b><div class="sub">⏱ ${x.t} h · ₹${x.c} · ★ ${x.p} · ${i<ord.length-1?`➜ ${ord[i+1].n} (${km(x,ord[i+1]).toFixed(1)} km)`:'🏁 End of trip'}</div></div></div>`)+'</div>';
+  if(m==='both'||m==='greedy')h+=panelBlock(g,'Greedy');
+  h+=`<h3 style="margin-top:24px">Algorithm ${m==='both'?'Comparison':'Result'}</h3><div class="grid g2">`;
+  if(m!=='knap')h+=panel('Greedy Result',g,T,B,'O(n log n)','Rank by efficiency score, then pick while it fits.');
+  if(m!=='greedy')h+=panel('Knapsack Result',k,T,B,'O(n × T × B)',`DP table of ${k.cells.toLocaleString()} cells (time in 0.5 h units, budget in ₹${k.bu} units).`);
+  h+='</div>';
+  if(m==='both'){const a=tot(g),b=tot(k);h+=`<div class="card tw" style="margin-top:14px"><table><tr><th>Metric</th><th>Greedy</th><th>Knapsack</th></tr>
+  <tr><td>Selection strategy</td><td>Best score first</td><td>Evaluate all combinations</td></tr><tr><td>Optimization method</td><td>Local choice</td><td>Dynamic programming</td></tr><tr><td>Time complexity</td><td>O(n log n)</td><td>O(n × T × B)</td></tr>
+  <tr><td>Budget usage</td><td>₹${a.c} / ${B} (${Math.round(a.c/B*100)}%)</td><td>₹${b.c} / ${B} (${Math.round(b.c/B*100)}%)</td></tr><tr><td>Time usage</td><td>${fmt(a.t)} / ${T} h (${Math.round(a.t/T*100)}%)</td><td>${fmt(b.t)} / ${T} h (${Math.round(b.t/T*100)}%)</td></tr><tr><td>Priority achieved</td><td><b>${a.p}</b></td><td><b>${b.p}</b></td></tr></table>
+  <p class="sub" style="margin:10px 0 0">Greedy is faster and simpler, while Knapsack systematically evaluates combinations and can provide a stronger optimization for constrained inputs.</p></div>`;}
+  if(m!=='greedy')h+=`<p class="sub" style="margin-top:10px"><b>Knapsack idea:</b> each cell dp[i][t][b] holds the best priority using the first i attractions with t time units and b budget units. Each item is either skipped or taken, so combinations are checked systematically instead of choosing only the best immediate option.</p>`;
+  h+=`<h3 style="margin-top:24px">Why Did the Algorithm Choose This?</h3><div class="grid g2">`+H(m==='both'?[['Greedy',g],['Knapsack',k]]:[[m==='greedy'?'Greedy':'Knapsack',main]],([nm,r])=>`<div class="card log"><b>${nm} decision log</b><div style="margin-top:8px">`+H(r.log,(l,i)=>`<div class="${l.ok?'y':'x'}">${l.ok?'✅':'❌'} <b>${l.name}</b> ${l.ok?'selected':'rejected'}<br><span class="sub">${i+1}. ${l.why}</span></div>`)+'</div></div>')+'</div>';
+  const bo=bfs(g2,start),dO=dfs(g2,start),nm=id=>DATA.find(x=>x.id===id).n;
+  h+=`<h3 style="margin-top:24px">Graph Traversal</h3><div class="card"><div class="chips"><span>Nodes: ${g2.V}</span><span>Edges: ${g2.E}</span><span>Complexity: O(V + E)</span></div>
+  <p><b>BFS from ${nm(start)}:</b> ${bo.map(nm).join(' → ')}</p><p><b>DFS from ${nm(start)}:</b> ${dO.map(nm).join(' → ')}</p><p class="sub" style="margin:0">Graph traversal helps represent relationships between attractions and supports route exploration.</p></div>`;
+  $('#res').innerHTML=h;
+  document.querySelectorAll('[data-n]').forEach(el=>{const to=+el.dataset.n,u=el.dataset.u||'',p=el.dataset.p||'',t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/700);el.textContent=p+fmt(Math.round(to*k*10)/10)+u;if(k<1)requestAnimationFrame(f);})(t0);});}
+function panelBlock(g){return`<h3 style="margin-top:24px">Greedy Decision Table</h3><div class="card tw"><table><tr><th>Attraction</th><th>Priority</th><th>Time</th><th>Cost</th><th>Efficiency Score</th><th>Decision</th><th>Reason</th></tr>`+H(g.rows,r=>`<tr><td><b>${r.n}</b></td><td>${r.p}</td><td>${r.t} h</td><td>₹${r.c}</td><td>${r.s.toFixed(2)}</td><td><span class="pill ${r.dec==='Selected'?'ok':'no'}">${r.dec}</span></td><td>${r.why}</td></tr>`)+`</table><p class="sub" style="margin:8px 0 0">Score = Priority / (Time/AvailableTime + Cost/AvailableBudget)</p></div>`;}
+
+function drawMap(){
+  const svg=$('#svg'),X=a=>60+(a.lng-78.37)/(78.49-78.37)*580,Y=a=>420-(a.lat-17.355)/(17.46-17.355)*380;
+  const gr=buildGraph(DATA);let h='<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#14935a"/></marker></defs><rect width="700" height="460" rx="14" fill="var(--bg)"/>';
+  h+='<g stroke="var(--line)" stroke-width="2">';const done=new Set();
+  gr.adj.forEach((s,a)=>s.forEach(b=>{const key=[a,b].sort().join('-');if(done.has(key))return;done.add(key);const p=DATA.find(x=>x.id===a),q=DATA.find(x=>x.id===b);h+=`<line x1="${X(p)}" y1="${Y(p)}" x2="${X(q)}" y2="${Y(q)}"/>`;}));h+='</g>';
+  let ord=[];if(st.out){const r=st.v==='greedy'?st.out.g:st.out.k;ord=route(r.sel);}
+  if(ord.length>1){let d='M'+ord.map(a=>X(a)+' '+Y(a)).join(' L'),len=0;for(let i=1;i<ord.length;i++)len+=Math.hypot(X(ord[i])-X(ord[i-1]),Y(ord[i])-Y(ord[i-1]));
+    h+=`<path id="route" d="${d}" fill="none" stroke="#14935a" stroke-width="4" stroke-linejoin="round" style="--len:${Math.ceil(len)+20}"/>`;
+    for(let i=1;i<ord.length;i++){const a=ord[i-1],b=ord[i],mx=(X(a)+X(b))/2,my=(Y(a)+Y(b))/2,dx=X(b)-X(a),dy=Y(b)-Y(a),L=Math.hypot(dx,dy)||1;h+=`<line x1="${mx-dx/L*8}" y1="${my-dy/L*8}" x2="${mx+dx/L*8}" y2="${my+dy/L*8}" stroke="#14935a" stroke-width="4" marker-end="url(#ar)"/>`;}}
+  DATA.forEach(a=>{const i=ord.findIndex(x=>x.id===a.id),on=i>=0;const lx=a.id===8||a.id===6||a.id===7?'start':'start';
+    h+=`<g><circle cx="${X(a)}" cy="${Y(a)}" r="${on?17:12}" fill="${on?'#14935a':'var(--card)'}" stroke="${on?'#0e6b43':'var(--mut)'}" stroke-width="2.5"/>`;
+    h+=on?`<text x="${X(a)}" y="${Y(a)+5}" text-anchor="middle" fill="#fff" font-weight="700" font-size="14">${i+1}</text>`:`<text x="${X(a)}" y="${Y(a)+4}" text-anchor="middle" font-size="12">${a.e}</text>`;
+    h+=`<text x="${X(a)+20}" y="${Y(a)-12}" font-size="13" font-weight="${on?700:500}" fill="var(--ink)">${a.n}</text>`;
+    if(on&&i===0)h+=`<text x="${X(a)+20}" y="${Y(a)+4}" font-size="12" font-weight="700" fill="#e8890c">▶ START</text>`;
+    if(on&&i===ord.length-1&&ord.length>1)h+=`<text x="${X(a)+20}" y="${Y(a)+4}" font-size="12" font-weight="700" fill="#e8890c">■ END</text>`;h+='</g>';});
+  if(!ord.length)h+='<text x="350" y="445" text-anchor="middle" font-size="13" fill="var(--mut)">Generate a trip to draw the recommended route</text>';
+  svg.innerHTML=h;}
+
+$('#go').onclick=()=>run();
+$('#demo').onclick=()=>{$('#T').value=8;$('#Tr').value=8;$('#B').value=1500;st.sel.clear();drawCards();run();};
+drawCards();drawMap();
+</script></body></html>
